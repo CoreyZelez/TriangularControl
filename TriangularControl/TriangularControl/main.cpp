@@ -1,6 +1,8 @@
 #include <SFML/Graphics.hpp>
 #include "Test.h"
 
+#include "Point.h"
+
 int main()
 {
 	using namespace sf;
@@ -10,6 +12,11 @@ int main()
 
 	RenderWindow window(VideoMode(1280, 720), "Triangular Control", Style::Default, settings); 
 	window.setFramerateLimit(60);
+
+	Point point(Vector2f(30, 30));
+	Player player(Color(200, 30, 30));
+	point.setOwner(player);
+
 
 	while(window.isOpen())
 	{
@@ -29,10 +36,10 @@ int main()
 		//Draw
 		window.clear();
 
+		point.draw(window);
 
 		window.display();
 	}
 
-	
 	return 0;
 }
