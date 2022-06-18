@@ -5,7 +5,10 @@ int main()
 {
 	using namespace sf;
 
-	RenderWindow window(VideoMode(1280, 720), "Triangular Control", Style::Default);
+	ContextSettings settings;
+	settings.antialiasingLevel = 8;
+
+	RenderWindow window(VideoMode(1280, 720), "Triangular Control", Style::Default, settings); 
 	window.setFramerateLimit(60);
 
 	while(window.isOpen())
