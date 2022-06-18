@@ -1,24 +1,24 @@
 #include "Point.h"
 
-const int POINT_SIZE = 60;
-const int SELECTED_POINT_SIZE = 80;
+const int POINT_SIZE = 5;
+const int SELECTED_POINT_SIZE = 8;
 
-void Point::setOwner(Player &newOwner)
-{
-	owner = &newOwner;
-}
-
-Point::Point(sf::Vector2f pos)
+Point::Point(const sf::Vector2f pos)
 	: position(pos)
 {
 }
 
-const Player *Point::getOwner()
+void Point::setOwner(const Player &newOwner)
+{
+	owner = &newOwner;
+}
+
+const Player *Point::getOwner() const
 {
 	return owner;
 }
 
-bool Point::getSelected()
+bool Point::getSelected() const
 {
 	return selected;
 }
@@ -35,7 +35,7 @@ void Point::changeSelected()
 	}
 }
 
-void Point::draw(sf::RenderWindow &window)
+void Point::draw(sf::RenderWindow &window) const
 {
 	sf::CircleShape circle(POINT_SIZE);
 	circle.setPosition(position);

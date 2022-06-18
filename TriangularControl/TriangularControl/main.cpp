@@ -1,5 +1,6 @@
 #include <SFML/Graphics.hpp>
 #include "Test.h"
+#include "Game.h"
 
 #include "Point.h"
 
@@ -10,12 +11,10 @@ int main()
 	ContextSettings settings;
 	settings.antialiasingLevel = 8;
 
-	RenderWindow window(VideoMode(1280, 720), "Triangular Control", Style::Default, settings); 
+	RenderWindow window(VideoMode(1920, 1080), "Triangular Control", Style::Fullscreen, settings); 
 	window.setFramerateLimit(60);
 
-	Point point(Vector2f(30, 30));
-	Player player(Color(200, 30, 30));
-	point.setOwner(player);
+	Game game(window, 21);
 
 
 	while(window.isOpen())
@@ -36,7 +35,7 @@ int main()
 		//Draw
 		window.clear();
 
-		point.draw(window);
+		game.drawBoard(window);
 
 		window.display();
 	}

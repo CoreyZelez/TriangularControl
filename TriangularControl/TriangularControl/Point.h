@@ -5,14 +5,15 @@ class Point
 {
 public:
 
-	Point(sf::Vector2f pos);
+	Point(const sf::Vector2f pos);
 
-	const Player *getOwner();
-	bool getSelected();
+	void draw(sf::RenderWindow &window) const;
+
+	const Player *getOwner() const;
+	void setOwner(const Player &newOwner);
+
+	bool getSelected() const;
 	void changeSelected();
-	void setOwner(Player &newOwner);
-
-	void draw(sf::RenderWindow &window);
 
 private:
 	const Player *owner = nullptr;  //nullptr indicates no owner.
