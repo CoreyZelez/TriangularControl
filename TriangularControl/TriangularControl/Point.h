@@ -1,6 +1,5 @@
 #pragma once
 #include "Player.h"
-#include <SFML/Graphics.hpp>
 class Point
 {
 public:
@@ -9,13 +8,22 @@ public:
 
 	void draw(sf::RenderWindow &window) const;
 
-	const Player *getOwner() const;
+	sf::Vector2f getPosition() const;
+
+	bool compareOwner(const Player &player) const;
 	void setOwner(const Player &newOwner);
+	sf::Color getOwnerColor() const;
 
 	bool getSelected() const;
 	void changeSelected();
 
+	const static float getPointSize();
+
 private:
+	const static float pointSize;
+	const static float selectedPointSize;
+
+	sf::CircleShape circle;
 	const Player *owner = nullptr;  //nullptr indicates no owner.
 	bool selected = false;
 	const sf::Vector2f position;

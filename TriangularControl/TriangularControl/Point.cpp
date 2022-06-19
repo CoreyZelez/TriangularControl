@@ -1,11 +1,28 @@
 #include "Point.h"
+#include <SFML/Graphics.hpp>
 
-const int POINT_SIZE = 5;
-const int SELECTED_POINT_SIZE = 8;
+const float Point::pointSize = 5;
+const float Point::selectedPointSize = 8;
 
 Point::Point(const sf::Vector2f pos)
-	: position(pos)
+	: position(pos), circle(pointSize)
 {
+	circle.setPosition(position);
+
+	//Determines circle fill color.
+	if(owner == nullptr)
+	{
+		circle.setFillColor(sf::Color(255, 255, 255, 255));
+	}
+	else
+	{
+		circle.setFillColor(owner->getColor());
+	}
+}
+
+bool Point::compareOwner(const Player &player) const
+{
+	return owner == &player;
 }
 
 void Point::setOwner(const Player &newOwner)
@@ -13,9 +30,9 @@ void Point::setOwner(const Player &newOwner)
 	owner = &newOwner;
 }
 
-const Player *Point::getOwner() const
+sf::Color Point::getOwnerColor() const
 {
-	return owner;
+	return owner->getColor();
 }
 
 bool Point::getSelected() const
@@ -35,19 +52,17 @@ void Point::changeSelected()
 	}
 }
 
+const float Point::getPointSize()
+{
+	return pointSize;
+}
+
 void Point::draw(sf::RenderWindow &window) const
 {
-	sf::CircleShape circle(POINT_SIZE);
-	circle.setPosition(position);
-	
-	if(owner == nullptr)
-	{
-		circle.setFillColor(sf::Color(255, 255, 255, 255));
-	}
-	else
-	{
-		circle.setFillColor(owner->getColor());
-	}
-
 	window.draw(circle);
+}
+
+sf::Vector2f Point::getPosition() const
+{
+	return position;
 }

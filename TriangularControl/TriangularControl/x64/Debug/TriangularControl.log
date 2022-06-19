@@ -1,2 +1,7 @@
-﻿  main.cpp
+﻿  Connection.cpp
+  Family.cpp
+  Game.cpp
+  Point.cpp
+  main.cpp
+  Generating Code...
   TriangularControl.vcxproj -> D:\Projects\TriangularControlRepository\TriangularControl\x64\Debug\TriangularControl.exe

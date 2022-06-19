@@ -1,7 +1,5 @@
-#include <SFML/Graphics.hpp>
 #include "Test.h"
 #include "Game.h"
-
 #include "Point.h"
 
 int main()

@@ -26,6 +26,15 @@ Game::Game(const sf::RenderWindow &window, const int size)
 
 		board.push_back(row);
 	}
+
+	//testing
+	players.push_back(sf::Color::Red);
+	board[0][0].setOwner(players[0]);
+	board[0][1].setOwner(players[0]);
+	board[4][4].setOwner(players[0]);
+	board[5][4].setOwner(players[0]);
+	connections.push_back(Connection(board[0][0], board[0][1]));
+	connections.push_back(Connection(board[4][4], board[5][4]));
 }
 
 void Game::drawBoard(sf::RenderWindow &window) const
@@ -37,12 +46,17 @@ void Game::drawBoard(sf::RenderWindow &window) const
 			point.draw(window);
 		}
 	}
+
+	for(Connection line : connections)
+	{
+		line.draw(window);
+	}
 }
 
 sf::Vector2u calculateTopLeft(const sf::RenderWindow &window, const int size, const int spacing)
 {
 	sf::Vector2u windowRegion = window.getSize();
 	const int x = (windowRegion.x - (size * spacing)) / 2;
-	const int y = ((windowRegion.y - (size * spacing)) / 2) + 8;
+	const int y = ((windowRegion.y - (size * spacing)) / 2) + 10;
 	return sf::Vector2u(x, y);
 }
