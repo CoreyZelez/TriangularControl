@@ -8,11 +8,13 @@ public:
 
 	void draw(sf::RenderWindow &window) const;
 
-	Point& detectMouseClick();
-
-	sf::Vector2f getPosition() const;
+	bool detectMouseClick(const sf::RenderWindow &window);
 
 	bool compareOwner(const Player &player) const;
+
+	//Getters and setters.
+	sf::Vector2f getPosition() const;
+
 	void setOwner(const Player &newOwner);
 	sf::Color getOwnerColor() const;
 
@@ -30,4 +32,6 @@ private:
 	bool selected = false;
 	const sf::Vector2f position;
 };
+
+int squareDistance(sf::Vector2i vec1, sf::Vector2i vec2);
 

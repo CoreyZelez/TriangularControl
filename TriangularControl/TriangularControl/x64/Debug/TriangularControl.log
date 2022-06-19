@@ -1,3 +1,5 @@
 ﻿  Game.cpp
-d:\projects\triangularcontrolrepository\triangularcontrol\triangularcontrol\game.cpp(10): warning C4244: 'argument': conversion from 'const float' to 'const int', possible loss of data
+d:\projects\triangularcontrolrepository\triangularcontrol\triangularcontrol\game.cpp(18): warning C4244: 'argument': conversion from 'const float' to 'const int', possible loss of data
+  main.cpp
+  Generating Code...
   TriangularControl.vcxproj -> D:\Projects\TriangularControlRepository\TriangularControl\x64\Debug\TriangularControl.exe

@@ -2,16 +2,23 @@
 #include <assert.h>
 
 
+bool Game::lockClick = false;
+
 Game::Game(const sf::RenderWindow &window, const int size)
 	: size(size), pointSpacing(44)
 {
 	assert(size > 0 && size <= maxSize);
 
+	//Initialises players
+	players.push_back(Player(sf::Color::Blue));
+	players.push_back(Player(sf::Color::Red));
+	currentPlayer = &players[0];
+
+	//Initialises board
 	sf::Vector2u boardTopLeft = calculateTopLeft(window, size, pointSpacing);
 	const int topLeftX = boardTopLeft.x;
 	const int topLeftY = boardTopLeft.y;
 
-	// Initialises board
 	for(int rowNum = 0; rowNum < size; ++rowNum)
 	{
 		std::vector<Point> row;
@@ -22,38 +29,31 @@ Game::Game(const sf::RenderWindow &window, const int size)
 			row.push_back(Point(sf::Vector2f(x, y)));
 		}
 
-		board.push_back(row);
+		points.push_back(row);
+	}
+}
+
+void Game::update(const sf::RenderWindow &window)
+{
+	if(!lockClick && sf::Mouse::isButtonPressed(sf::Mouse::Left))
+	{
+		lockClick = true;
+		for(auto row : points)
+		{
+			for(Point point : row)
+			{
+				if(point.detectMouseClick(window))
+				{
+
+				}
+			}
+		}
 	}
 
-	//testing
-	players.push_back(sf::Color::Red);
-	board[0][0].setOwner(players[0]);
-	board[0][1].setOwner(players[0]);
-	board[4][4].setOwner(players[0]);
-	board[5][4].setOwner(players[0]);
-	board[8][10].setOwner(players[0]);
-	board[7][11].setOwner(players[0]);
-	board[9][11].setOwner(players[0]);
-	board[9][9].setOwner(players[0]);
-	board[9][10].setOwner(players[0]);
-	board[13][3].setOwner(players[0]);
-	board[13][4].setOwner(players[0]);
-	board[5][20].setOwner(players[0]);
-	board[6][20].setOwner(players[0]);
-
-	connections.push_back(Connection(board[0][1], board[0][0]));
-	connections.push_back(Connection(board[13][3], board[13][4]));
-
-
-	connections.push_back(Connection(board[4][4], board[5][4]));
-	connections.push_back(Connection(board[6][20], board[5][20]));
-
-
-	connections.push_back(Connection(board[8][10], board[9][11]));
-	connections.push_back(Connection(board[8][10], board[9][9]));
-	connections.push_back(Connection(board[8][10], board[7][11]));
-	connections.push_back(Connection(board[8][10], board[7][9]));
-
+	if(!sf::Mouse::isButtonPressed(sf::Mouse::Left))
+	{
+		lockClick = false;
+	}
 }
 
 void Game::drawBoard(sf::RenderWindow &window) const
@@ -63,7 +63,7 @@ void Game::drawBoard(sf::RenderWindow &window) const
 		line.draw(window);
 	}
 
-	for(auto row : board)
+	for(auto row : points)
 	{
 		for(Point point : row)
 		{

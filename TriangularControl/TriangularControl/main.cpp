@@ -28,7 +28,7 @@ int main()
 		}
 		
 		//Update
-
+		game.update(window);
 
 		//Draw
 		window.clear();
