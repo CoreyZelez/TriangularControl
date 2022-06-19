@@ -8,6 +8,8 @@ public:
 
 	void draw(sf::RenderWindow &window) const;
 
+	Point& detectMouseClick();
+
 	sf::Vector2f getPosition() const;
 
 	bool compareOwner(const Player &player) const;

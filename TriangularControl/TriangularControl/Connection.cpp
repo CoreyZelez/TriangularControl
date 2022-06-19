@@ -16,6 +16,21 @@ Connection::Connection(const Point &p1, const Point &p2)
 	if(xDiff != 0 && yDiff != 0)
 	{
 
+		//Case line is right diagonal.
+		if(xDiff > 0 && yDiff > 0 || xDiff < 0 && yDiff < 0)
+		{
+			line = sf::RectangleShape(sf::Vector2f(xDiff * sqrt(2), lineWidth));
+			line.setOrigin(sf::Vector2f(0, Point::getPointSize() / 2));
+			line.rotate(45);
+		}
+		//Case line is left diagonal
+		else
+		{
+			line = sf::RectangleShape(sf::Vector2f(lineWidth, yDiff * sqrt(2)));
+			line.setOrigin(sf::Vector2f(0, Point::getPointSize() / 2));
+			line.rotate(45);
+		}
+
 	}
 	//Case line is vertical.
 	else if(xDiff == 0)

@@ -1,15 +1,13 @@
 #include "Game.h"
 #include <assert.h>
 
-const int MAX_SIZE = 23;
-const int POINT_SPACING = 44;
 
 Game::Game(const sf::RenderWindow &window, const int size)
-	: size(size)
+	: size(size), pointSpacing(44)
 {
-	assert(size > 0 && size <= MAX_SIZE);
+	assert(size > 0 && size <= maxSize);
 
-	sf::Vector2u boardTopLeft = calculateTopLeft(window, size, POINT_SPACING);
+	sf::Vector2u boardTopLeft = calculateTopLeft(window, size, pointSpacing);
 	const int topLeftX = boardTopLeft.x;
 	const int topLeftY = boardTopLeft.y;
 
@@ -19,8 +17,8 @@ Game::Game(const sf::RenderWindow &window, const int size)
 		std::vector<Point> row;
 		for(int colNum = 0; colNum < size; ++colNum)
 		{
-			const float x = (float)topLeftX + (POINT_SPACING * colNum);
-			const float y = (float)topLeftY + (POINT_SPACING * rowNum);
+			const float x = (float)topLeftX + (pointSpacing * colNum);
+			const float y = (float)topLeftY + (pointSpacing * rowNum);
 			row.push_back(Point(sf::Vector2f(x, y)));
 		}
 
@@ -33,8 +31,29 @@ Game::Game(const sf::RenderWindow &window, const int size)
 	board[0][1].setOwner(players[0]);
 	board[4][4].setOwner(players[0]);
 	board[5][4].setOwner(players[0]);
+	board[8][10].setOwner(players[0]);
+	board[7][11].setOwner(players[0]);
+	board[9][11].setOwner(players[0]);
+	board[9][9].setOwner(players[0]);
+	board[9][10].setOwner(players[0]);
+	board[13][3].setOwner(players[0]);
+	board[13][4].setOwner(players[0]);
+	board[5][20].setOwner(players[0]);
+	board[6][20].setOwner(players[0]);
+
 	connections.push_back(Connection(board[0][1], board[0][0]));
+	connections.push_back(Connection(board[13][3], board[13][4]));
+
+
 	connections.push_back(Connection(board[4][4], board[5][4]));
+	connections.push_back(Connection(board[6][20], board[5][20]));
+
+
+	connections.push_back(Connection(board[8][10], board[9][11]));
+	connections.push_back(Connection(board[8][10], board[9][9]));
+	connections.push_back(Connection(board[8][10], board[7][11]));
+	connections.push_back(Connection(board[8][10], board[7][9]));
+
 }
 
 void Game::drawBoard(sf::RenderWindow &window) const
@@ -53,6 +72,7 @@ void Game::drawBoard(sf::RenderWindow &window) const
 	}
 }
 
+//Calculates the correct top left position of the board.
 sf::Vector2u calculateTopLeft(const sf::RenderWindow &window, const int size, const int spacing)
 {
 	sf::Vector2u windowRegion = window.getSize();

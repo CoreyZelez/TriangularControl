@@ -10,7 +10,11 @@ public:
 	void drawBoard(sf::RenderWindow &window) const;
 
 private:
+	static const int maxSize = 27;
 	const int size;
+	const float pointSpacing;  //Should be dependant on size in future.
+
+
 	std::vector<Player> players;
 	std::vector<std::vector<Point>> board;
 	std::vector<Connection> connections;
