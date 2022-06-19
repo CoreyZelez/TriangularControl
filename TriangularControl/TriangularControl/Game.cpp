@@ -33,23 +33,23 @@ Game::Game(const sf::RenderWindow &window, const int size)
 	board[0][1].setOwner(players[0]);
 	board[4][4].setOwner(players[0]);
 	board[5][4].setOwner(players[0]);
-	connections.push_back(Connection(board[0][0], board[0][1]));
+	connections.push_back(Connection(board[0][1], board[0][0]));
 	connections.push_back(Connection(board[4][4], board[5][4]));
 }
 
 void Game::drawBoard(sf::RenderWindow &window) const
 {
+	for(Connection line : connections)
+	{
+		line.draw(window);
+	}
+
 	for(auto row : board)
 	{
 		for(Point point : row)
 		{
 			point.draw(window);
 		}
-	}
-
-	for(Connection line : connections)
-	{
-		line.draw(window);
 	}
 }
 

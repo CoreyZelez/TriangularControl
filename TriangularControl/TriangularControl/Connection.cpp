@@ -28,7 +28,10 @@ Connection::Connection(const Point &p1, const Point &p2)
 		line = sf::RectangleShape(sf::Vector2f(xDiff, lineWidth));
 	}
 
-	line.setPosition(point1.getPosition());
+	const float xPos = point1.getPosition().x + (2 * Point::getPointSize() - lineWidth) / 2;
+	const float yPos = point1.getPosition().y + (2 * Point::getPointSize() - lineWidth) / 2;
+	line.setPosition(sf::Vector2f(xPos, yPos));
+
 	line.setFillColor(color);
 
 }
