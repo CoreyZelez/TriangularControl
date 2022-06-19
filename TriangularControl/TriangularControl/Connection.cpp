@@ -2,7 +2,7 @@
 #include <assert.h>
 #include <cstdlib>
 
-const float Connection::lineWidth = 5;
+const float Connection::lineWidth = 6;
 
 Connection::Connection(const Point &p1, const Point &p2)
 	: point1(p1), point2(p2), color(point1.getOwnerColor())
@@ -56,4 +56,38 @@ void Connection::draw(sf::RenderWindow &window)
 	window.draw(line);
 }
 
+bool Connection::contains(const Point & p1, const Point & p2) const
+{
+	if((&point1 == &p1 && &point2 == &p2) || (&point1 == &p2 && &point2 == &p1))
+	{
+		return true;
+	}
 
+	return false;
+}
+
+bool Connection::isDiagonal()
+{
+	if(abs(point1.getPosition().x - point2.getPosition().x) 
+		== abs(point1.getPosition().y - point2.getPosition().y))
+	{
+		return true;
+	}
+
+	return false;
+}
+
+bool connectionSearch(const std::vector<Connection> &connections, const Point &p1, const Point &p2)
+{
+	for(const Connection &connection : connections)
+	{
+		if(connection.contains(p1, p2))
+		{
+			return true;
+		}
+
+		return false;
+	}
+
+	return false;
+}

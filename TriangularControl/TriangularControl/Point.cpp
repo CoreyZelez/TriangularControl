@@ -1,38 +1,43 @@
 #include "Point.h"
 #include <SFML/Graphics.hpp>
+#include <iostream>
 #include <assert.h>
 
-const float Point::pointSize = 5;
-const float Point::selectedPointSize = 8;
+const float Point::pointRadius = 6;
+const float Point::selectedPointRadius = 7;
+const float Point::pointOutlineThickness = 3;
 
 Point::Point(const sf::Vector2f pos)
-	: position(pos), circle(pointSize)
+	: position(pos), circle(pointRadius)
 {
 	circle.setPosition(position);
-
-	//Determines circle fill color.
-	if(owner == nullptr)
-	{
-		circle.setFillColor(sf::Color(255, 255, 255, 255));
-	}
-	else
-	{
-		circle.setFillColor(owner->getColor());
-	}
+	circle.setFillColor(sf::Color(255, 255, 255, 255));
 }
 
-bool Point::compareOwner(const Player &player) const
+bool Point::compareOwner(const Player *player) const
 {
-	return owner == &player;
+	return owner == player;
+}
+
+bool Point::noOwner()
+{
+	return owner == nullptr;
 }
 
 void Point::setOwner(const Player &newOwner)
 {
 	owner = &newOwner;
+	circle.setOutlineThickness(pointOutlineThickness);
+	circle.setOutlineColor(owner->getColor());
 }
 
 sf::Color Point::getOwnerColor() const
 {
+	if(owner == nullptr)
+	{
+		return sf::Color::White;
+	}
+
 	return owner->getColor();
 }
 
@@ -46,32 +51,41 @@ void Point::changeSelected()
 	if(selected == false)
 	{
 		selected = true;
+
+		const int radiusIncrease = selectedPointRadius - pointRadius;
+
+		sf::Vector2f newPosition((int)position.x - radiusIncrease, 
+			(int)position.y - radiusIncrease);
+
+		circle.setPosition(newPosition);
+		circle.setRadius(selectedPointRadius);
 	}
+
 	else
 	{
 		selected = false;
+		circle.setPosition(position);
+		circle.setRadius(pointRadius);
 	}
 }
 
 const float Point::getPointSize()
 {
-	return pointSize;
+	return pointRadius;
 }
+
 
 void Point::draw(sf::RenderWindow &window) const
 {
 	window.draw(circle);
 }
 
-bool Point::detectMouseClick(const sf::RenderWindow &window)
+bool Point::detectMouseClick(const sf::Vector2i mousePosition)
 {
-	assert(sf::Mouse::isButtonPressed(sf::Mouse::Left));
-
-	const int centerX = (int)(getPosition().x - pointSize);
-	const int centerY = (int)(getPosition().y - pointSize);
+	const int centerX = (int)(getPosition().x + pointRadius);
+	const int centerY = (int)(getPosition().y + pointRadius);
 	const sf::Vector2i circleCenter(centerX, centerY);
-	const sf::Vector2i mousePosition = sf::Mouse::getPosition(window);
-	const int radiusSquared = (int)circle.getRadius() ^ 2;
+	const int radiusSquared = pow(circle.getRadius(), 2);
 
 	if(squareDistance(circleCenter, mousePosition) < radiusSquared)
 	{
@@ -88,5 +102,5 @@ sf::Vector2f Point::getPosition() const
 
 int squareDistance(sf::Vector2i vec1, sf::Vector2i vec2)
 {
-	return (vec1.x - vec2.x) ^ 2 + (vec1.y - vec2.y) ^ 2;
+	return pow(vec1.x - vec2.x, 2) + pow(vec1.y - vec2.y, 2);
 }
