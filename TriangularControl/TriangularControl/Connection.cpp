@@ -85,8 +85,6 @@ bool connectionSearch(const std::vector<Connection> &connections, const Point &p
 		{
 			return true;
 		}
-
-		return false;
 	}
 
 	return false;

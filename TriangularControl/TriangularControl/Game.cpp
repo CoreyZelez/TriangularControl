@@ -73,48 +73,31 @@ void Game::update(const sf::RenderWindow &window)
 						nextPlayer();
 					}
 					//Case point is different to prev selected
-					else
+					else if(sourcePointCoords.row >= 0)
 					{
 						//Case move is diagonal. Must check for blocking diagonal.
 						if(Connection(*sourcePoint, point).isDiagonal())
 						{
-							int r1;
-							int c1;
-							int r2;
-							int c2;
+							int r1, c1, r2, c2;
 
 							//Case diagonal is left.
 							if(sourcePointCoords.row - row == sourcePointCoords.col - col)
 							{
-								int r1 = max(sourcePointCoords.row, row);
-								int c1 = min(sourcePointCoords.col, col);
-								int r2 = r1 - 1;
-								int c2 = c1 + 1;
-
-								//Case the blocking diagonal exists.
-								if(connectionSearch(connections, points[r1][c1], points[r2][c2]))
-								{
-									wasPointSelected = false;
-								}
-								else
-								{
-									sourcePoint->setOwner(*currentPlayer);
-									point.setOwner(*currentPlayer);
-									connections.push_back(Connection(*sourcePoint, point));
-									resetSelectedPoint();
-									nextPlayer();
-								}
+								r1 = max(sourcePointCoords.row, row);
+								c1 = min(sourcePointCoords.col, col);
+								r2 = r1 - 1;
+								c2 = c1 + 1;		
 							}
 							//Case diagonal is right.
 							else
 							{
-								int r1 = max(sourcePointCoords.row, row);
-								int c1 = max(sourcePointCoords.col, col);
-								int r2 = r1 - 1;
-								int c2 = c1 - 1;
+								r1 = max(sourcePointCoords.row, row);
+								c1 = max(sourcePointCoords.col, col);
+								r2 = r1 - 1;
+								c2 = c1 - 1;
 							}
 
-
+							//Adds the connection if valid.
 							if(connectionSearch(connections, points[r1][c1], points[r2][c2]))
 							{
 								wasPointSelected = false;

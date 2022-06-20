@@ -1,6 +1,8 @@
 #include "Test.h"
 #include "Game.h"
 #include "Point.h"
+#include <iostream>
+
 
 int main()
 {
