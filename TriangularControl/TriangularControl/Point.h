@@ -1,8 +1,5 @@
 #pragma once
 #include "Player.h"
-#include "Family.h"
-
-class Family; 
 
 class Point
 {
@@ -19,8 +16,6 @@ public:
 	bool compareOwner(const Player *player) const;
 	bool noOwner() const;
 
-	bool compareFamily(Point point) const;
-
 	//Getters and setters.
 	sf::Vector2f getPosition() const;
 
@@ -32,20 +27,17 @@ public:
 	void changeSelected();
 
 	const static float getPointSize();
-
-	void setFamily(const Family *family);
-
 private:
-	//Primitive members.
+	//Static members.
 	const static float selectionRadiusMultiplier;
 	const static float pointRadius;
 	const static float selectedPointRadius;  
 	const static float pointOutlineThickness;  //Outline of circle thickness for player controlled points.
 
+	//Primitive members.
 	bool selected = false;
 
 	//Objects.
-	const Family *family;
 	sf::CircleShape circle;
 	const Player *owner = nullptr;  //nullptr indicates no owner.
 	const sf::Vector2f position;

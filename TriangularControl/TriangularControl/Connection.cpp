@@ -14,7 +14,7 @@ void Connection::draw(sf::RenderWindow &window)
 	window.draw(line);
 }
 
-bool Connection::contains(const Point & p1, const Point & p2) const
+bool Connection::contains(const Point &p1, const Point &p2) const
 {
 	if((&point1 == &p1 && &point2 == &p2) || (&point1 == &p2 && &point2 == &p1))
 	{

@@ -2,7 +2,7 @@
 #include <array>
 #include "Point.h"
 #include "Connection.h"
-#include "Coordinates2i.h"
+#include "Coordinate2i.h"
 class Game2Player
 {
 public:
@@ -18,12 +18,11 @@ private:
 	void completeConnections(const int row, const int col);
 	void completeAdjacentConnections(const int row, const int col);
 	void currentPlayerMove(const sf::RenderWindow &window);
-	void playerConnectionMove(const int row, const int col);  //Move for when player connects 2 points successfully.
+	void connectionMove(const int row, const int col);  //called when player connects 2 points successfully.
 	void diagonalMove(bool &wasPointSelected, const int row, const int col);
 	void rightDiagonalMove(bool &wasPointSelected, const int row, const int col);
 	void leftDiagonalMove(bool &wasPointSelected, const int row, const int col);
-
-	void resetSelectedPoint();
+	void resetSelectedPoint();  //Sets it to nullptr.
 
 	//Primitive members.
 	static bool lockClick;
@@ -35,7 +34,7 @@ private:
 
     //Objects.
 	Point *sourcePoint = nullptr; //First point selected in a given player move.
-	Coordinates2i sourcePointCoords;  //x->row, y->col
+	Coordinate2i sourcePointCoords;  //x->row, y->col
 	Player *currentPlayer;
 
 	//Containers.
@@ -45,7 +44,7 @@ private:
 };
 
 sf::Vector2u calculateTopLeft(const sf::RenderWindow &window, const int size, const int spacing);
-bool isNeighbouringCoord(Coordinates2i coord1, Coordinates2i coord2);
+bool isNeighbouringCoord(Coordinate2i coord1, Coordinate2i coord2);
 int max(int a, int b);
 int min(int a, int b);
 

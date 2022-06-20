@@ -12,7 +12,7 @@ Point::Point(const sf::Vector2f pos)
 	: position(pos), circle(pointRadius)
 {
 	circle.setPosition(position);
-	circle.setFillColor(sf::Color(255, 255, 255, 255));
+	circle.setFillColor(sf::Color::White);
 }
 
 bool Point::compareOwner(Point point) const
@@ -28,14 +28,6 @@ bool Point::compareOwner(Point point) const
 bool Point::compareOwner(const Player *player) const
 {
 	return owner == player;
-}
-
-bool Point::compareFamily(Point point) const
-{
-	if(family == point.family)
-	{
-		return true;
-	}
 }
 
 bool Point::noOwner() const
@@ -62,7 +54,7 @@ sf::Color Point::getOwnerColor() const
 
 void Point::setColorYellow()
 {
-	circle.setFillColor(sf::Color::Yellow);
+	circle.setFillColor(sf::Color(255, 255, 30, 255));
 
 }
 
@@ -98,11 +90,6 @@ void Point::changeSelected()
 const float Point::getPointSize()
 {
 	return pointRadius;
-}
-
-void Point::setFamily(const Family *family)
-{
-	this->family = family;
 }
 
 

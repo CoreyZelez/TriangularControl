@@ -10,6 +10,7 @@ Game2Player::Game2Player(const sf::RenderWindow &window, const int size, const i
 	: size(size), pointSpacing(47), sourcePointCoords{ -2, -2 }, safetyNum(safetyNum)
 {
 	assert(size > 0 && size <= maxSize);
+	assert(size % 2 == 1); //Board should be odd size.
 
 	//Initialises players
 	players.push_back(Player(sf::Color(25, 25, 255, 255)));
@@ -17,7 +18,7 @@ Game2Player::Game2Player(const sf::RenderWindow &window, const int size, const i
 	currentPlayer = &players[0];
 
 	//Initialises board
-	sf::Vector2u boardTopLeft = calculateTopLeft(window, size, pointSpacing);
+	const sf::Vector2u boardTopLeft = calculateTopLeft(window, size, pointSpacing);
 	const int topLeftX = boardTopLeft.x;
 	const int topLeftY = boardTopLeft.y;
 
@@ -33,6 +34,14 @@ Game2Player::Game2Player(const sf::RenderWindow &window, const int size, const i
 
 		points.push_back(row);
 	}
+
+	points[3][3].setColorYellow();
+	points[size -4][3].setColorYellow();
+	points[size - 4][size - 4].setColorYellow();
+	points[3][size - 4].setColorYellow();
+	points[size / 2][size / 2].setColorYellow();
+
+
 }
 
 void Game2Player::update(const sf::RenderWindow &window)
@@ -78,11 +87,12 @@ void Game2Player::resetSelectedPoint()
 	sourcePointCoords = { -2, -2 };
 }
 
+
 void Game2Player::completeConnections(const int row, const int col)
 {
 	assert(!points[row][col].noOwner());
 
-	const Point &point = points[row][col];
+	Point &point = points[row][col];
 
 	const int prevRow = row - 1;
 	const int nextRow = row + 1;
@@ -206,6 +216,7 @@ void Game2Player::currentPlayerMove(const sf::RenderWindow &window)
 		lockClick = true;
 		const sf::Vector2i mousePosition = sf::Mouse::getPosition(window);
 		bool wasPointSelected = false;
+		//Iterates through every point until it detects a point that has been clicked on.
 		for(int row = 0; row < size; ++row)
 		{
 			for(int col = 0; col < size; ++col)
@@ -261,7 +272,7 @@ void Game2Player::currentPlayerMove(const sf::RenderWindow &window)
 						//Case connection is not diagonal.
 						else
 						{
-							playerConnectionMove(row, col);
+							connectionMove(row, col);
 						}
 					}
 
@@ -283,7 +294,7 @@ void Game2Player::currentPlayerMove(const sf::RenderWindow &window)
 	}
 }
 
-void Game2Player::playerConnectionMove(const int row, const int col)
+void Game2Player::connectionMove(const int row, const int col)
 {
 	Point &point = points[row][col];
 
@@ -293,10 +304,11 @@ void Game2Player::playerConnectionMove(const int row, const int col)
 	connections.push_back(Connection(*sourcePoint, point));
 
 	//Connects necessary points.
-	completeConnections(sourcePointCoords.row, sourcePointCoords.col);
 	completeConnections(row, col);
-	completeAdjacentConnections(sourcePointCoords.row, sourcePointCoords.col);
+	completeConnections(sourcePointCoords.row, sourcePointCoords.col);
 	completeAdjacentConnections(row, col);
+	completeAdjacentConnections(sourcePointCoords.row, sourcePointCoords.col);
+
 
 	resetSelectedPoint();
 	nextPlayer();
@@ -334,7 +346,7 @@ void Game2Player::rightDiagonalMove(bool &wasPointSelected, const int row, const
 	}
 	else
 	{
-		playerConnectionMove(row, col);
+		connectionMove(row, col);
 	}
 }
 
@@ -352,7 +364,7 @@ void Game2Player::leftDiagonalMove(bool &wasPointSelected, const int row, const 
 	}
 	else
 	{
-		playerConnectionMove(row, col);
+		connectionMove(row, col);
 	}
 }
 
@@ -366,7 +378,7 @@ sf::Vector2u calculateTopLeft(const sf::RenderWindow &window, const int size, co
 	return sf::Vector2u(x, y);
 }
 
-bool isNeighbouringCoord(Coordinates2i coord1, Coordinates2i coord2)
+bool isNeighbouringCoord(Coordinate2i coord1, Coordinate2i coord2)
 {
 	if(abs(coord1.row - coord2.row) > 1 || abs(coord1.col - coord2.col) > 1)
 	{
