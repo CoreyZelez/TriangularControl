@@ -1,14 +1,21 @@
 #pragma once
 #include <set>
 #include "Point.h"
+
+class Point;
+
 class Family
 {
 public:
-	Family(Point point);
-	Family(Point point1, Point point2);
+	Family(Point &point);
+	Family(Point &point1, Point &point2);
 
-	void addPoint(Point point);
+	//Functions.
+	void addPoint(Point &point);
+	void absorb(const Family &family);
 private:
-	std::vector<Point> points;
+
+	//Containers.
+	std::vector<Point*> points;
 };
 

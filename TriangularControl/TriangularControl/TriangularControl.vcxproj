@@ -22,7 +22,7 @@
     <ClCompile Include="Connection.cpp" />
     <ClCompile Include="Coordinates2i.cpp" />
     <ClCompile Include="Family.cpp" />
-    <ClCompile Include="Game.cpp" />
+    <ClCompile Include="Game2Player.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="Player.cpp" />
     <ClCompile Include="Point.cpp" />
@@ -31,7 +31,7 @@
     <ClInclude Include="Connection.h" />
     <ClInclude Include="Coordinates2i.h" />
     <ClInclude Include="Family.h" />
-    <ClInclude Include="Game.h" />
+    <ClInclude Include="Game2Player.h" />
     <ClInclude Include="Player.h" />
     <ClInclude Include="Point.h" />
   </ItemGroup>

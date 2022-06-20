@@ -3,6 +3,7 @@
 #include <iostream>
 #include <assert.h>
 
+const float Point::selectionRadiusMultiplier = 2;
 const float Point::pointRadius = 6;
 const float Point::selectedPointRadius = 7;
 const float Point::pointOutlineThickness = 3;
@@ -14,12 +15,30 @@ Point::Point(const sf::Vector2f pos)
 	circle.setFillColor(sf::Color(255, 255, 255, 255));
 }
 
+bool Point::compareOwner(Point point) const
+{
+	if(point.owner == owner)
+	{
+		return true;
+	}
+
+	return false;
+}
+
 bool Point::compareOwner(const Player *player) const
 {
 	return owner == player;
 }
 
-bool Point::noOwner()
+bool Point::compareFamily(Point point) const
+{
+	if(family == point.family)
+	{
+		return true;
+	}
+}
+
+bool Point::noOwner() const
 {
 	return owner == nullptr;
 }
@@ -40,6 +59,13 @@ sf::Color Point::getOwnerColor() const
 
 	return owner->getColor();
 }
+
+void Point::setColorYellow()
+{
+	circle.setFillColor(sf::Color::Yellow);
+
+}
+
 
 bool Point::getSelected() const
 {
@@ -74,6 +100,11 @@ const float Point::getPointSize()
 	return pointRadius;
 }
 
+void Point::setFamily(const Family *family)
+{
+	this->family = family;
+}
+
 
 void Point::draw(sf::RenderWindow &window) const
 {
@@ -85,9 +116,9 @@ bool Point::detectMouseClick(const sf::Vector2i mousePosition)
 	const int centerX = (int)(getPosition().x + pointRadius);
 	const int centerY = (int)(getPosition().y + pointRadius);
 	const sf::Vector2i circleCenter(centerX, centerY);
-	const int radiusSquared = pow(circle.getRadius(), 2);
+	const int selectionRadiusSquared = pow(circle.getRadius() * selectionRadiusMultiplier, 2);
 
-	if(squareDistance(circleCenter, mousePosition) < radiusSquared)
+	if(squareDistance(circleCenter, mousePosition) < selectionRadiusSquared)
 	{
 		return true;
 	}

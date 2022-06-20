@@ -1,5 +1,5 @@
 #include "Test.h"
-#include "Game.h"
+#include "Game2Player.h"
 #include "Point.h"
 #include <iostream>
 
@@ -14,7 +14,7 @@ int main()
 	RenderWindow window(VideoMode(1920, 1080), "Triangular Control", Style::Fullscreen, settings); 
 	window.setFramerateLimit(60);
 
-	Game game(window, 21);
+	Game2Player game2Player(window, 21, 13);
 
 
 	while(window.isOpen())
@@ -30,12 +30,12 @@ int main()
 		}
 		
 		//Update
-		game.update(window);
+		game2Player.update(window);
 
 		//Draw
 		window.clear();
 
-		game.drawBoard(window);
+		game2Player.drawBoard(window);
 
 		window.display();
 	}
