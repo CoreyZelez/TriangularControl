@@ -59,6 +59,22 @@ void Point::setColorYellow()
 }
 
 
+void Point::setFamily(PointFamily *family)
+{
+	this->family = family;
+}
+
+PointFamily* Point::getFamily() const
+{
+	return family;
+}
+
+bool Point::hasFamily()
+{
+	return family != nullptr;
+}
+
+
 bool Point::getSelected() const
 {
 	return selected;

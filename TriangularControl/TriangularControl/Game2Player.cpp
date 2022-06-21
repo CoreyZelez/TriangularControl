@@ -47,6 +47,13 @@ Game2Player::Game2Player(const sf::RenderWindow &window, const int size, const i
 void Game2Player::update(const sf::RenderWindow &window)
 {
 	currentPlayerMove(window);
+	removeEmptyFamilies();
+	numFamilies();
+}
+
+void Game2Player::numFamilies()
+{
+	std::cout << families.size();
 }
 
 void Game2Player::nextPlayer()
@@ -87,12 +94,29 @@ void Game2Player::resetSelectedPoint()
 	sourcePointCoords = { -2, -2 };
 }
 
+void Game2Player::removeEmptyFamilies()
+{
+	auto familyIter = families.begin();
+
+	while(familyIter != families.end())
+	{
+		if(familyIter->isEmpty())
+		{
+			families.erase(familyIter++);
+		}
+		else
+		{
+			++familyIter;
+		}
+	}
+}
+
+
+
 
 void Game2Player::completeConnections(const int row, const int col)
 {
-	assert(!points[row][col].noOwner());
-
-	Point &point = points[row][col];
+	Point *point = &points[row][col];
 
 	const int prevRow = row - 1;
 	const int nextRow = row + 1;
@@ -100,36 +124,36 @@ void Game2Player::completeConnections(const int row, const int col)
 	const int nextCol = col + 1;
 
 	//Adds horizontal and vertical connections.
-	if(prevRow >= 0 && point.compareOwner(points[prevRow][col])) 
+	if(prevRow >= 0 && point->compareOwner(points[prevRow][col])) 
 	{
 		//Only adds connection if not already in connections (no duplication of connections).
-		if(!connectionSearch(connections, point, points[prevRow][col]))
+		if(!connectionSearch(connections, point, &points[prevRow][col]))
 		{
-			connections.push_back(Connection(point, points[prevRow][col]));
+			connections.push_back(Connection(point, &points[prevRow][col]));
 		}
 	}
-	if(nextRow < size && point.compareOwner(points[nextRow][col]))
+	if(nextRow < size && point->compareOwner(points[nextRow][col]))
 	{
 		//Only adds connection if not already in connections (no duplication of connections).
-		if(!connectionSearch(connections, point, points[nextRow][col]))
+		if(!connectionSearch(connections, point, &points[nextRow][col]))
 		{
-			connections.push_back(Connection(point, points[nextRow][col]));
+			connections.push_back(Connection(point, &points[nextRow][col]));
 		}
 	}
-	if(prevCol >= 0 && point.compareOwner(points[row][prevCol]))
+	if(prevCol >= 0 && point->compareOwner(points[row][prevCol]))
 	{
 		//Only adds connection if not already in connections (no duplication of connections).
-		if(!connectionSearch(connections, point, points[row][prevCol]))
+		if(!connectionSearch(connections, point, &points[row][prevCol]))
 		{
-			connections.push_back(Connection(point, points[row][prevCol]));
+			connections.push_back(Connection(point, &points[row][prevCol]));
 		}
 	}
-	if(nextCol < size && point.compareOwner(points[row][nextCol]))
+	if(nextCol < size && point->compareOwner(points[row][nextCol]))
 	{
 		//Only adds connection if not already in connections (no duplication of connections).
-		if(!connectionSearch(connections, point, points[row][nextCol]))
+		if(!connectionSearch(connections, point, &points[row][nextCol]))
 		{
-			connections.push_back(Connection(point, points[row][nextCol]));
+			connections.push_back(Connection(point, &points[row][nextCol]));
 		}
 	}
 
@@ -137,48 +161,48 @@ void Game2Player::completeConnections(const int row, const int col)
 	//Upper right diagonal.
 	if(prevRow >= 0 && nextCol < size)
 	{
-		if(point.compareOwner(points[prevRow][nextCol]) &&
-			(point.compareOwner(points[prevRow][col]) || point.compareOwner(points[row][nextCol])))
+		if(point->compareOwner(points[prevRow][nextCol]) &&
+			(point->compareOwner(points[prevRow][col]) || point->compareOwner(points[row][nextCol])))
 		{
-			if(!connectionSearch(connections, points[row][nextCol], points[prevRow][col]))
+			if(!connectionSearch(connections, &points[row][nextCol], &points[prevRow][col]))
 			{
-				connections.push_back(Connection(points[row][col], points[prevRow][nextCol]));
+				connections.push_back(Connection(&points[row][col], &points[prevRow][nextCol]));
 			}
 		}
 	}
 	//Lower right diagonal.
 	if(nextRow < size && nextCol < size)
 	{
-		if(point.compareOwner(points[nextRow][nextCol]) &&
-			(point.compareOwner(points[row][nextCol]) || point.compareOwner(points[nextRow][col])))
+		if(point->compareOwner(points[nextRow][nextCol]) &&
+			(point->compareOwner(points[row][nextCol]) || point->compareOwner(points[nextRow][col])))
 		{
-			if(!connectionSearch(connections, points[row][nextCol], points[nextRow][col]))
+			if(!connectionSearch(connections, &points[row][nextCol], &points[nextRow][col]))
 			{
-				connections.push_back(Connection(points[row][col], points[nextRow][nextCol]));
+				connections.push_back(Connection(&points[row][col], &points[nextRow][nextCol]));
 			}
 		}
 	}
 	//Upper left diagonal.
 	if(prevRow >= 0 && prevCol >= 0)
 	{
-		if(point.compareOwner(points[prevRow][prevCol]) &&
-			(point.compareOwner(points[prevRow][col]) || point.compareOwner(points[row][prevCol])))
+		if(point->compareOwner(points[prevRow][prevCol]) &&
+			(point->compareOwner(points[prevRow][col]) || point->compareOwner(points[row][prevCol])))
 		{
-			if(!connectionSearch(connections, points[prevRow][col], points[row][prevCol]))
+			if(!connectionSearch(connections, &points[prevRow][col], &points[row][prevCol]))
 			{
-				connections.push_back(Connection(points[row][col], points[prevRow][prevCol]));
+				connections.push_back(Connection(&points[row][col], &points[prevRow][prevCol]));
 			}
 		}
 	}
 	//Lower left diagonal.
 	if(nextRow < size && prevCol >= 0)
 	{
-		if(point.compareOwner(points[nextRow][prevCol]) &&
-			(point.compareOwner(points[row][prevCol]) || point.compareOwner(points[nextRow][col])))
+		if(point->compareOwner(points[nextRow][prevCol]) &&
+			(point->compareOwner(points[row][prevCol]) || point->compareOwner(points[nextRow][col])))
 		{
-			if(!connectionSearch(connections, points[row][prevCol], points[nextRow][col]))
+			if(!connectionSearch(connections, &points[row][prevCol], &points[nextRow][col]))
 			{
-				connections.push_back(Connection(points[row][col], points[nextRow][prevCol]));
+				connections.push_back(Connection(&points[row][col], &points[nextRow][prevCol]));
 			}
 		}
 	}
@@ -246,8 +270,13 @@ void Game2Player::currentPlayerMove(const sf::RenderWindow &window)
 						if(sourcePoint->noOwner())
 						{
 							sourcePoint->setOwner(*currentPlayer);
+
+							families.push_back(PointFamily(sourcePoint));
+							sourcePoint->setFamily(&families.back());
+
 							completeConnections(row, col);
 							completeAdjacentConnections(row, col);
+
 							resetSelectedPoint();
 							nextPlayer();
 						}
@@ -257,7 +286,7 @@ void Game2Player::currentPlayerMove(const sf::RenderWindow &window)
 						}
 					}
 					//Case both points already have existing connection.
-					else if(connectionSearch(connections, *sourcePoint, point))
+					else if(connectionSearch(connections, sourcePoint, &point))
 					{
 						wasPointSelected = false;
 					}
@@ -265,7 +294,7 @@ void Game2Player::currentPlayerMove(const sf::RenderWindow &window)
 					else
 					{
 						//Case move is diagonal. Must check for blocking diagonal.
-						if(Connection(*sourcePoint, point).isDiagonal())
+						if(isDiagonal(sourcePointCoords, {row, col}))
 						{
 							diagonalMove(wasPointSelected, row, col);
 						}
@@ -301,7 +330,25 @@ void Game2Player::connectionMove(const int row, const int col)
 	sourcePoint->setOwner(*currentPlayer);
 	point.setOwner(*currentPlayer);
 
-	connections.push_back(Connection(*sourcePoint, point));
+	//Sets family of each point if "familyless".
+	if(!point.hasFamily() && !sourcePoint->hasFamily())
+	{
+		families.push_back(PointFamily(&point, sourcePoint));
+		point.setFamily(&families.back());
+		sourcePoint->setFamily(&families.back());
+	}
+	else if(!point.hasFamily())
+	{
+		families.push_back(PointFamily(&point));
+		point.setFamily(&families.back());
+	}
+	else if(!sourcePoint->hasFamily())
+	{
+		families.push_back(PointFamily(sourcePoint));
+		sourcePoint->setFamily(&families.back());
+	}
+
+	connections.push_back(Connection(sourcePoint, &point));
 
 	//Connects necessary points.
 	completeConnections(row, col);
@@ -340,7 +387,7 @@ void Game2Player::rightDiagonalMove(bool &wasPointSelected, const int row, const
 	const int c2 = c1 - 1;
 
 	//Adds the connection if valid.
-	if(connectionSearch(connections, points[r1][c1], points[r2][c2]))
+	if(connectionSearch(connections, &points[r1][c1], &points[r2][c2]))
 	{
 		wasPointSelected = false;
 	}
@@ -358,7 +405,7 @@ void Game2Player::leftDiagonalMove(bool &wasPointSelected, const int row, const 
 	const int c2 = c1 + 1;
 
 	//Adds the connection if valid.
-	if(connectionSearch(connections, points[r1][c1], points[r2][c2]))
+	if(connectionSearch(connections, &points[r1][c1], &points[r2][c2]))
 	{
 		wasPointSelected = false;
 	}
@@ -368,6 +415,16 @@ void Game2Player::leftDiagonalMove(bool &wasPointSelected, const int row, const 
 	}
 }
 
+
+bool isDiagonal(const Coordinate2i c1, const Coordinate2i c2)
+{
+	if(c1.row - c2.row != 0 && c1.col - c2.col != 0)
+	{
+		return true;
+	}
+
+	return false;
+}
 
 //Calculates the correct top left position of the board.
 sf::Vector2u calculateTopLeft(const sf::RenderWindow &window, const int size, const int spacing)

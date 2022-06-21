@@ -1,5 +1,8 @@
 #pragma once
 #include "Player.h"
+#include "PointFamily.h"
+
+class PointFamily;
 
 class Point
 {
@@ -23,6 +26,10 @@ public:
 	sf::Color getOwnerColor() const;  //Returns white if no owner.
 	void setColorYellow();  
 
+	void setFamily(PointFamily *family);
+	PointFamily* getFamily() const;
+	bool hasFamily();
+
 	bool getSelected() const;
 	void changeSelected();
 
@@ -41,6 +48,7 @@ private:
 	sf::CircleShape circle;
 	const Player *owner = nullptr;  //nullptr indicates no owner.
 	const sf::Vector2f position;
+	PointFamily *family = nullptr;
 };
 
 int squareDistance(sf::Vector2i vec1, sf::Vector2i vec2);

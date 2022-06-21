@@ -1,8 +1,10 @@
 #pragma once
-#include <array>
+#include <List>
 #include "Point.h"
 #include "Connection.h"
 #include "Coordinate2i.h"
+#include "PointFamily.h"
+
 class Game2Player
 {
 public:
@@ -13,16 +15,27 @@ public:
 	void drawBoard(sf::RenderWindow &window) const;
 
 private:
+
+	//temp function 
+	void numFamilies();
+
 	//Functions.
 	void nextPlayer();
-	void completeConnections(const int row, const int col);
-	void completeAdjacentConnections(const int row, const int col);
+
 	void currentPlayerMove(const sf::RenderWindow &window);
+
 	void connectionMove(const int row, const int col);  //called when player connects 2 points successfully.
 	void diagonalMove(bool &wasPointSelected, const int row, const int col);
 	void rightDiagonalMove(bool &wasPointSelected, const int row, const int col);
 	void leftDiagonalMove(bool &wasPointSelected, const int row, const int col);
+
+	void completeConnections(const int row, const int col);
+	void completeAdjacentConnections(const int row, const int col); //Completes connections to adjacent coordinates.
+
 	void resetSelectedPoint();  //Sets it to nullptr.
+
+	void removeEmptyFamilies();
+
 
 	//Primitive members.
 	static bool lockClick;
@@ -41,7 +54,10 @@ private:
 	std::vector<Player> players;
 	std::vector<std::vector<Point>> points;
 	std::vector<Connection> connections;
+	std::list<PointFamily> families;
 };
+
+bool isDiagonal(const Coordinate2i c1, const Coordinate2i c2);
 
 sf::Vector2u calculateTopLeft(const sf::RenderWindow &window, const int size, const int spacing);
 bool isNeighbouringCoord(Coordinate2i coord1, Coordinate2i coord2);
