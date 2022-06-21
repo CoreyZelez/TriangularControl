@@ -1,6 +1,5 @@
 #include "Game2Player.h"
 #include <assert.h>
-#include <iostream>
 #include <algorithm>
 
 
@@ -48,12 +47,6 @@ void Game2Player::update(const sf::RenderWindow &window)
 {
 	currentPlayerMove(window);
 	removeEmptyFamilies();
-	numFamilies();
-}
-
-void Game2Player::numFamilies()
-{
-	std::cout << families.size();
 }
 
 void Game2Player::nextPlayer()
@@ -68,16 +61,16 @@ void Game2Player::nextPlayer()
 	}
 }
 
-void Game2Player::drawBoard(sf::RenderWindow &window) const
+void Game2Player::drawBoard(sf::RenderWindow &window) 
 {
-	for(Connection line : connections)
+	for(Connection &line : connections)
 	{
 		line.draw(window);
 	}
 
-	for(auto row : points)
+	for(const auto &row : points)
 	{
-		for(Point point : row)
+		for(const Point &point : row)
 		{
 			point.draw(window);
 		}
@@ -112,6 +105,264 @@ void Game2Player::removeEmptyFamilies()
 }
 
 
+bool Game2Player::diagonalLibertyExists(const int row, const int col, const Player &player) const
+{
+	int nextRow = row + 1;
+	int nextCol = col + 1;
+	int prevRow = row - 1;
+	int prevCol = col - 1;
+
+	const Point &point = points[row][col];
+
+	//Upper right diagonal.
+	if(prevRow >= 0 && nextCol < size)
+	{
+
+		if(!connectionSearch(connections, &points[row][col], &points[prevRow][nextCol]) &&
+			(points[prevRow][nextCol].noOwner() || points[prevRow][nextCol].compareOwner(&player))
+			&& !connectionSearch(connections, &points[row][nextCol], &points[prevRow][col]))
+		{
+			return true;
+		}
+	}
+	//Lower right diagonal.
+	if(nextRow < size && nextCol < size)
+	{
+		if(!connectionSearch(connections, &points[row][col], &points[nextRow][nextCol]) &&
+			(points[nextRow][nextCol].noOwner() || points[nextRow][nextCol].compareOwner(&player))
+			&& !connectionSearch(connections, &points[row][nextCol], &points[nextRow][col]))
+		{
+			return true;
+		}
+	}
+	//Lower left diagonal.
+	if(nextRow < size && prevCol >= 0)
+	{
+		if(!connectionSearch(connections, &points[row][col], &points[nextRow][prevCol]) && 
+			(points[nextRow][prevCol].noOwner() || points[nextRow][prevCol].compareOwner(&player))
+			&& !connectionSearch(connections, &points[row][prevCol], &points[nextRow][col]))
+		{
+			return true;
+		}
+	}
+	//Upper left diagonal.
+	if(prevRow >= 0 && prevCol >= 0)
+	{
+		if(!connectionSearch(connections, &points[row][col], &points[prevRow][prevCol]) &&
+			(points[prevRow][prevCol].noOwner() || points[prevRow][prevCol].compareOwner(&player))
+			&& !connectionSearch(connections, &points[row][prevCol], &points[prevRow][col]))
+		{
+			return true;
+		}
+	}
+
+	return false;
+}
+
+bool Game2Player::familySurrounded(const PointFamily &family) const
+{
+	for(int row = 0; row < size; ++row)
+	{
+		for(int col = 0; col < size; ++col)
+		{
+			const Point &point = points[row][col];
+
+			if(point.getFamily() == &family && libertyMoveExists(row, col, *family.getOwner()))
+			{
+				return false;
+			}
+		}
+	}
+
+	return true;
+}
+
+void Game2Player::transferWeakFamiliesOwnership(const Player &player)
+{
+	std::list<PointFamily*> weakFamilies;
+
+	for(PointFamily &family : families)
+	{
+		if(family.isEmpty())
+		{
+			continue;
+		}
+
+		if(family.getOwner() != &player &&  !familyIsEdgeSafe(family) && familySurrounded(family))
+		{
+			weakFamilies.push_back(&family);
+		}
+	}
+
+	//Converts each point in weakFamilies to the new owner.
+	for(PointFamily *family : weakFamilies)
+	{
+		family->transferOwnership(player);
+	}
+
+	completeAllConnections();
+}
+
+int Game2Player::familyIsEdgeSafe(const PointFamily & family)
+{
+	int cnt = 0;
+
+	//Iterates through every edge square of points and determines num controlled triangles.
+
+	for(int col = 0; col < size - 1; ++col)
+	{
+		//Counts top row triangles.
+		int pointCnt = 0;
+		if(family.contains(&points[0][col]))
+		{
+			++pointCnt;
+		}
+		if(family.contains(&points[0][col + 1]))
+		{
+			++pointCnt;
+		}
+		if(family.contains(&points[1][col]))
+		{
+			++pointCnt;
+		}
+		if(family.contains(&points[1][col + 1]))
+		{
+			++pointCnt;
+		}
+
+		//increments cnt based on how many points found.
+		if(pointCnt == 3)
+		{
+			++cnt;
+		}
+		else if(pointCnt == 4)
+		{
+			cnt += 2;
+		}
+
+		//Counts bottom row triangles.
+		pointCnt = 0;
+		if(family.contains(&points[size - 1][col]))
+		{
+			++pointCnt;
+		}
+		if(family.contains(&points[size - 1][col + 1]))
+		{
+			++pointCnt;
+		}
+		if(family.contains(&points[size - 2][col]))
+		{
+			++pointCnt;
+		}
+		if(family.contains(&points[size - 2][col + 1]))
+		{
+			++pointCnt;
+		}
+
+		//increments cnt based on how many points found.
+		if(pointCnt == 3)
+		{
+			++cnt;
+		}
+		else if(pointCnt == 4)
+		{
+			cnt += 2;
+		}
+	}
+
+	for(int row = 1; row < size - 3; ++row)
+	{
+		//Counts top row triangles.
+		int pointCnt = 0;
+		if(family.contains(&points[row][0]))
+		{
+			++pointCnt;
+		}
+		if(family.contains(&points[row][1]))
+		{
+			++pointCnt;
+		}
+		if(family.contains(&points[row + 1][0]))
+		{
+			++pointCnt;
+		}
+		if(family.contains(&points[row + 1][1]))
+		{
+			++pointCnt;
+		}
+
+		//increments cnt based on how many points found.
+		if(pointCnt == 3)
+		{
+			++cnt;
+		}
+		else if(pointCnt == 4)
+		{
+			cnt += 2;
+		}
+
+		//Counts bottom row triangles.
+		pointCnt = 0;
+		if(family.contains(&points[row][size - 2]))
+		{
+			++pointCnt;
+		}
+		if(family.contains(&points[row][size - 1]))
+		{
+			++pointCnt;
+		}
+		if(family.contains(&points[row + 1][size - 2]))
+		{
+			++pointCnt;
+		}
+		if(family.contains(&points[row + 1][size - 1]))
+		{
+			++pointCnt;
+		}
+
+		//increments cnt based on how many points found.
+		if(pointCnt == 3)
+		{
+			++cnt;
+		}
+		else if(pointCnt == 4)
+		{
+			cnt += 2;
+		}
+	}
+
+	if(cnt >= safetyNum)
+	{
+		return true;
+	}
+
+	return false;
+}
+
+
+bool Game2Player::libertyMoveExists(const int row, const int col, const Player &player) const
+{
+	const int nextRow = row + 1;
+	const int nextCol = col + 1;
+	const int prevRow = row - 1;
+	const int prevCol = col - 1;
+
+	if(diagonalLibertyExists(row, col, player))
+	{
+		return true;
+	}
+
+	//Searches for horizontal or vertical liberty.
+	if(    (nextRow < size && points[nextRow][col].noOwner()) 
+		|| (prevRow >= 0   && points[prevRow][col].noOwner())
+		|| (nextCol < size && points[row][nextCol].noOwner())
+		|| (prevCol >= 0   && points[row][prevCol].noOwner()))
+	{
+		return true;
+	}
+
+	return false;
+}
 
 
 void Game2Player::completeConnections(const int row, const int col)
@@ -232,6 +483,20 @@ void Game2Player::completeAdjacentConnections(const int row, const int col)
 	}
 }
 
+void Game2Player::completeAllConnections()
+{
+	for(int row = 0; row < size; ++row)
+	{
+		for(int col = 0; col < size; ++col)
+		{
+			if(!points[row][col].noOwner())
+			{
+				completeConnections(row, col);
+			}
+		}
+	}
+}
+
 void Game2Player::currentPlayerMove(const sf::RenderWindow &window)
 {
 	//Updates board based on move by current player.
@@ -278,7 +543,11 @@ void Game2Player::currentPlayerMove(const sf::RenderWindow &window)
 							completeAdjacentConnections(row, col);
 
 							resetSelectedPoint();
+
+							transferWeakFamiliesOwnership(*currentPlayer);
 							nextPlayer();
+							transferWeakFamiliesOwnership(*currentPlayer);
+
 						}
 						else
 						{
@@ -358,12 +627,15 @@ void Game2Player::connectionMove(const int row, const int col)
 
 
 	resetSelectedPoint();
+
+	transferWeakFamiliesOwnership(*currentPlayer);
 	nextPlayer();
+	transferWeakFamiliesOwnership(*currentPlayer);
 }
 
-void Game2Player::diagonalMove(bool &wasPointSelected, const int row, const int col)
+void Game2Player::diagonalMove(bool &wasPointSelected, const int row, const int col) 
 {
-	Point &point = points[row][col];
+	const Point &point = points[row][col];
 
 	int r1, c1, r2, c2;
 
@@ -379,7 +651,7 @@ void Game2Player::diagonalMove(bool &wasPointSelected, const int row, const int 
 	}
 }
 
-void Game2Player::rightDiagonalMove(bool &wasPointSelected, const int row, const int col)
+void Game2Player::rightDiagonalMove(bool &wasPointSelected, const int row, const int col)  
 {
 	const int r1 = max(sourcePointCoords.row, row);
 	const int c1 = max(sourcePointCoords.col, col);
@@ -397,7 +669,7 @@ void Game2Player::rightDiagonalMove(bool &wasPointSelected, const int row, const
 	}
 }
 
-void Game2Player::leftDiagonalMove(bool &wasPointSelected, const int row, const int col)
+void Game2Player::leftDiagonalMove(bool &wasPointSelected, const int row, const int col)  
 {
 	const int r1 = max(sourcePointCoords.row, row);
 	const int c1 = min(sourcePointCoords.col, col);

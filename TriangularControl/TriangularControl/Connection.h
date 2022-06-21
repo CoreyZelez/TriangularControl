@@ -20,7 +20,6 @@ private:
 	const Point *point1;
 	const Point *point2;
 	sf::RectangleShape line;
-	const sf::Color color;
 };
 
 //Searches for a connection in connections between p1 and p2.

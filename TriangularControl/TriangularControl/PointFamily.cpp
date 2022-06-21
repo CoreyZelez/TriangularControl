@@ -1,5 +1,4 @@
 #include "PointFamily.h"
-#include <iostream>
 #include <assert.h>
 
 PointFamily::PointFamily(Point *p)
@@ -13,6 +12,19 @@ PointFamily::PointFamily(Point *p1, Point *p2)
 	points.push_back(p2);
 }
 
+const Player* PointFamily::getOwner() const
+{
+	return points[0]->getOwner();
+}
+
+void PointFamily::transferOwnership(const Player &player)
+{
+	for(Point *point : points)
+	{
+		point->setOwner(player);
+	}
+}
+
 void PointFamily::absorb(PointFamily *family)
 {
 	for(Point *point : family->points)
@@ -21,11 +33,20 @@ void PointFamily::absorb(PointFamily *family)
 		point->setFamily(this);
 	}
 
-	std::cout << family << std::endl;
 	if(family != nullptr)
 	{
 		family->points.clear();
 	}
+}
+
+bool PointFamily::contains(Point *point) const
+{
+	if(std::find(points.begin(), points.end(), point) != points.end())
+	{
+		return true;
+	}
+
+	return false;
 }
 
 bool PointFamily::isEmpty() const
@@ -33,13 +54,7 @@ bool PointFamily::isEmpty() const
 	return points.empty();
 }
 
-void PointFamily::transferFamilyOwnership(Player & newOwner)
-{
-	for(Point *point : points)
-	{
 
-	}
-}
 
 bool PointFamily::isGreaterSize(PointFamily *family) const
 {

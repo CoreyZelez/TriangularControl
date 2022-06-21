@@ -1,6 +1,5 @@
 #include "Point.h"
 #include <SFML/Graphics.hpp>
-#include <iostream>
 #include <assert.h>
 
 const float Point::selectionRadiusMultiplier = 2;
@@ -28,6 +27,11 @@ bool Point::compareOwner(Point point) const
 bool Point::compareOwner(const Player *player) const
 {
 	return owner == player;
+}
+
+const Player * Point::getOwner() const
+{
+	return owner;
 }
 
 bool Point::noOwner() const

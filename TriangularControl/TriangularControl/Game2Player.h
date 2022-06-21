@@ -12,14 +12,18 @@ public:
 
 	//Functions.
 	void update(const sf::RenderWindow &window);
-	void drawBoard(sf::RenderWindow &window) const;
+	void drawBoard(sf::RenderWindow &window);
 
 private:
-
-	//temp function 
-	void numFamilies();
-
 	//Functions.
+	bool libertyMoveExists(const int row, const int col, const Player &player) const;  //Checks if there is a possible move from the given coordinates.
+	bool diagonalLibertyExists(const int row, const int col, const Player &player) const;
+
+	bool familySurrounded(const PointFamily &family) const;
+	void transferWeakFamiliesOwnership(const Player &player);  //Gives weak "enemy" surrounded families to player.
+
+	int familyIsEdgeSafe(const PointFamily &family);  //determines if family has enough edge triangles to be safe.
+
 	void nextPlayer();
 
 	void currentPlayerMove(const sf::RenderWindow &window);
@@ -31,6 +35,7 @@ private:
 
 	void completeConnections(const int row, const int col);
 	void completeAdjacentConnections(const int row, const int col); //Completes connections to adjacent coordinates.
+	void completeAllConnections();
 
 	void resetSelectedPoint();  //Sets it to nullptr.
 

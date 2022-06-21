@@ -4,14 +4,15 @@
 const float Connection::lineWidth = 6;
 
 Connection::Connection(Point *p1, Point *p2)
-	: point1(p1), point2(p2), color(point1->getOwnerColor())
+	: point1(p1), point2(p2)
 {
 	initLine();
 	mergePointFamilies(p1, p2);
 }
 
-void Connection::draw(sf::RenderWindow &window)
+void Connection::draw(sf::RenderWindow &window) 
 {
+	line.setFillColor(point1->getOwnerColor());
 	window.draw(line);
 }
 
@@ -63,8 +64,6 @@ void Connection::initLine()
 	const float xPos = point1->getPosition().x + (2 * Point::getPointSize() - lineWidth) / 2;
 	const float yPos = point1->getPosition().y + (2 * Point::getPointSize() - lineWidth) / 2;
 	line.setPosition(sf::Vector2f(xPos, yPos));
-
-	line.setFillColor(color);
 }
 
 bool connectionSearch(const std::vector<Connection> &connections, const Point *p1, const Point *p2)

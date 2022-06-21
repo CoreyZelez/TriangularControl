@@ -17,6 +17,7 @@ public:
 
 	bool compareOwner(Point point) const;
 	bool compareOwner(const Player *player) const;
+	const Player *getOwner() const;
 	bool noOwner() const;
 
 	//Getters and setters.
