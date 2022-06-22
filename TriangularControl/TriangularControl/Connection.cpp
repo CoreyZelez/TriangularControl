@@ -12,8 +12,12 @@ Connection::Connection(Point *p1, Point *p2)
 
 void Connection::draw(sf::RenderWindow &window) 
 {
-	line.setFillColor(point1->getOwnerColor());
 	window.draw(line);
+}
+
+void Connection::updateLineColor()
+{
+	line.setFillColor(point1->getOwnerColor());
 }
 
 bool Connection::contains(const Point *p1, const Point *p2) const
@@ -64,6 +68,10 @@ void Connection::initLine()
 	const float xPos = point1->getPosition().x + (2 * Point::getPointSize() - lineWidth) / 2;
 	const float yPos = point1->getPosition().y + (2 * Point::getPointSize() - lineWidth) / 2;
 	line.setPosition(sf::Vector2f(xPos, yPos));
+	if(!point1->noOwner())
+	{
+		line.setFillColor(point1->getOwnerColor());
+	}
 }
 
 bool connectionSearch(const std::vector<Connection> &connections, const Point *p1, const Point *p2)

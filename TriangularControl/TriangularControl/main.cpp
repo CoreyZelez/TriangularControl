@@ -11,7 +11,7 @@ int main()
 	settings.antialiasingLevel = 8;
 
 	RenderWindow window(VideoMode(1920, 1080), "Triangular Control", Style::Fullscreen, settings); 
-	//window.setFramerateLimit(60);
+	window.setFramerateLimit(60);
 
 	Game2Player game2Player(window, 21, 13);
 

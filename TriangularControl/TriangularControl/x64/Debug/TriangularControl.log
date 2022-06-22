@@ -1,9 +1,9 @@
 ﻿  Game2Player.cpp
 d:\projects\triangularcontrolrepository\triangularcontrol\triangularcontrol\game2player.cpp(20): warning C4244: 'argument': conversion from 'const float' to 'const int', possible loss of data
-d:\projects\triangularcontrolrepository\triangularcontrol\triangularcontrol\game2player.cpp(640): warning C4101: 'c1': unreferenced local variable
-d:\projects\triangularcontrolrepository\triangularcontrol\triangularcontrol\game2player.cpp(640): warning C4101: 'r2': unreferenced local variable
-d:\projects\triangularcontrolrepository\triangularcontrol\triangularcontrol\game2player.cpp(640): warning C4101: 'r1': unreferenced local variable
-d:\projects\triangularcontrolrepository\triangularcontrol\triangularcontrol\game2player.cpp(640): warning C4101: 'c2': unreferenced local variable
+d:\projects\triangularcontrolrepository\triangularcontrol\triangularcontrol\game2player.cpp(652): warning C4101: 'c1': unreferenced local variable
+d:\projects\triangularcontrolrepository\triangularcontrol\triangularcontrol\game2player.cpp(652): warning C4101: 'r2': unreferenced local variable
+d:\projects\triangularcontrolrepository\triangularcontrol\triangularcontrol\game2player.cpp(652): warning C4101: 'r1': unreferenced local variable
+d:\projects\triangularcontrolrepository\triangularcontrol\triangularcontrol\game2player.cpp(652): warning C4101: 'c2': unreferenced local variable
   main.cpp
   Generating Code...
   TriangularControl.vcxproj -> D:\Projects\TriangularControlRepository\TriangularControl\x64\Debug\TriangularControl.exe

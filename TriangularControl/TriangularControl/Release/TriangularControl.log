@@ -1,0 +1,37 @@
+﻿  Connection.cpp
+d:\projects\triangularcontrolrepository\triangularcontrol\triangularcontrol\connection.cpp(41): warning C4244: 'argument': conversion from 'double' to 'T', possible loss of data
+          with
+          [
+              T=float
+          ]
+d:\projects\triangularcontrolrepository\triangularcontrol\triangularcontrol\connection.cpp(48): warning C4244: 'argument': conversion from 'double' to 'T', possible loss of data
+          with
+          [
+              T=float
+          ]
+  Coordinate2i.cpp
+  Game2Player.cpp
+d:\projects\triangularcontrolrepository\triangularcontrol\triangularcontrol\game2player.cpp(20): warning C4244: 'argument': conversion from 'const float' to 'const int', possible loss of data
+d:\projects\triangularcontrolrepository\triangularcontrol\triangularcontrol\game2player.cpp(640): warning C4101: 'c1': unreferenced local variable
+d:\projects\triangularcontrolrepository\triangularcontrol\triangularcontrol\game2player.cpp(640): warning C4101: 'r2': unreferenced local variable
+d:\projects\triangularcontrolrepository\triangularcontrol\triangularcontrol\game2player.cpp(640): warning C4101: 'r1': unreferenced local variable
+d:\projects\triangularcontrolrepository\triangularcontrol\triangularcontrol\game2player.cpp(640): warning C4101: 'c2': unreferenced local variable
+  main.cpp
+  Player.cpp
+  Point.cpp
+d:\projects\triangularcontrolrepository\triangularcontrol\triangularcontrol\point.cpp(93): warning C4244: 'initializing': conversion from 'float' to 'int', possible loss of data
+d:\projects\triangularcontrolrepository\triangularcontrol\triangularcontrol\point.cpp(96): warning C4244: 'argument': conversion from 'int' to 'T', possible loss of data
+          with
+          [
+              T=float
+          ]
+d:\projects\triangularcontrolrepository\triangularcontrol\triangularcontrol\point.cpp(95): warning C4244: 'argument': conversion from 'int' to 'T', possible loss of data
+          with
+          [
+              T=float
+          ]
+d:\projects\triangularcontrolrepository\triangularcontrol\triangularcontrol\point.cpp(126): warning C4244: 'initializing': conversion from 'float' to 'int', possible loss of data
+d:\projects\triangularcontrolrepository\triangularcontrol\triangularcontrol\point.cpp(126): warning C4244: 'initializing': conversion from 'float' to 'const int', possible loss of data
+d:\projects\triangularcontrolrepository\triangularcontrol\triangularcontrol\point.cpp(143): warning C4244: 'return': conversion from 'double' to 'int', possible loss of data
+  PointFamily.cpp
+sfml-graphics.lib(sfml-graphics-2.dll) : fatal error LNK1112: module machine type 'x64' conflicts with target machine type 'x86'

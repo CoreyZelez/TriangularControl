@@ -51,6 +51,10 @@ void Game2Player::update(const sf::RenderWindow &window)
 
 void Game2Player::nextPlayer()
 {
+	//Transfers the weak families to current player.
+	transferWeakFamiliesOwnership(*currentPlayer);
+
+	//Swaps current player.
 	if(currentPlayer == &players[0])
 	{
 		currentPlayer = &players[1];
@@ -59,6 +63,9 @@ void Game2Player::nextPlayer()
 	{
 		currentPlayer = &players[0];
 	}
+
+	//Transfers the weak families to current player.
+	transferWeakFamiliesOwnership(*currentPlayer);
 }
 
 void Game2Player::drawBoard(sf::RenderWindow &window) 
@@ -200,7 +207,15 @@ void Game2Player::transferWeakFamiliesOwnership(const Player &player)
 		family->transferOwnership(player);
 	}
 
-	completeAllConnections();
+	//completeAllConnections();  //Whether this line is required needs further testing.
+	if(!weakFamilies.empty())
+	{
+		for(Connection &connection : connections)
+		{
+			connection.updateLineColor();
+		}
+		completeAllConnections();
+	}
 }
 
 int Game2Player::familyIsEdgeSafe(const PointFamily & family)
@@ -544,10 +559,7 @@ void Game2Player::currentPlayerMove(const sf::RenderWindow &window)
 
 							resetSelectedPoint();
 
-							transferWeakFamiliesOwnership(*currentPlayer);
 							nextPlayer();
-							transferWeakFamiliesOwnership(*currentPlayer);
-
 						}
 						else
 						{

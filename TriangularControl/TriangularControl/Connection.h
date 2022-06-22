@@ -7,6 +7,7 @@ public:
 
 	//Functions.
 	void draw(sf::RenderWindow &window);
+	void updateLineColor();
 	bool contains(const Point *p1, const Point *p2) const;
 
 private:
