@@ -33,11 +33,11 @@ private:
 	void rightDiagonalMove(bool &wasPointSelected, const int row, const int col);
 	void leftDiagonalMove(bool &wasPointSelected, const int row, const int col);
 
-	void completeConnections(const int row, const int col);
+	void completeConnections(const int row, const int col);  //Completes connections to specified coordinate.
 	void completeAdjacentConnections(const int row, const int col); //Completes connections to adjacent coordinates.
-	void completeAllConnections();
+	void completeAllConnections();  //Completes connections for every point on board. 
 
-	void resetSelectedPoint();  //Sets it to nullptr.
+	void resetSourcePoint();  //Sets it to nullptr.
 
 	void removeEmptyFamilies();
 

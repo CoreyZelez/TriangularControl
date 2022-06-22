@@ -12,11 +12,8 @@ public:
 
 	const Player* getOwner() const;
 	void transferOwnership(const Player &player);
-
 	void absorb(PointFamily *family);
-
 	bool contains(Point *point) const;
-
 	bool isGreaterSize(PointFamily *family) const;
 	bool isEmpty() const;
 private:

@@ -84,7 +84,7 @@ void Game2Player::drawBoard(sf::RenderWindow &window)
 	}
 }
 
-void Game2Player::resetSelectedPoint()
+void Game2Player::resetSourcePoint()
 {
 	if(sourcePoint != nullptr)
 	{
@@ -557,7 +557,7 @@ void Game2Player::currentPlayerMove(const sf::RenderWindow &window)
 							completeConnections(row, col);
 							completeAdjacentConnections(row, col);
 
-							resetSelectedPoint();
+							resetSourcePoint();
 
 							nextPlayer();
 						}
@@ -594,7 +594,7 @@ void Game2Player::currentPlayerMove(const sf::RenderWindow &window)
 		//Case the selection was cancelled or no point selected.
 		if(!wasPointSelected)
 		{
-			resetSelectedPoint();
+			resetSourcePoint();
 		}
 	}
 
@@ -638,7 +638,7 @@ void Game2Player::connectionMove(const int row, const int col)
 	completeAdjacentConnections(sourcePointCoords.row, sourcePointCoords.col);
 
 
-	resetSelectedPoint();
+	resetSourcePoint();
 
 	transferWeakFamiliesOwnership(*currentPlayer);
 	nextPlayer();

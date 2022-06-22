@@ -17,13 +17,13 @@ public:
 
 	bool compareOwner(Point point) const;
 	bool compareOwner(const Player *player) const;
-	const Player *getOwner() const;
 	bool noOwner() const;
 
 	//Getters and setters.
 	sf::Vector2f getPosition() const;
 
 	void setOwner(const Player &newOwner);
+	const Player *getOwner() const;
 	sf::Color getOwnerColor() const;  //Returns white if no owner.
 	void setColorYellow();  
 
