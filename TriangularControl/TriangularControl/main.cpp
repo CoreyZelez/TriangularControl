@@ -13,7 +13,7 @@ int main()
 	RenderWindow window(VideoMode(1920, 1080), "Triangular Control", Style::Fullscreen, settings); 
 	window.setFramerateLimit(60);
 
-	Game2Player game2Player(window, 21, 13);
+	Game2Player game2Player(window, 21, 15);
 
 
 	while(window.isOpen())
